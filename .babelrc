@@ -1,0 +1,16 @@
+{
+  "sourceMap": true,
+  "presets": [
+    "stage-2",
+    [
+      "env",
+      {
+        "targets": {
+          "node": 6
+        },
+        "debug": false
+      }
+    ]
+  ],
+  "plugins": ["add-module-exports", "source-map-support-for-6"]
+}
