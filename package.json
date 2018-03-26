@@ -3,8 +3,55 @@
   "version": "1.0.0",
   "description": "A hapi js boilerplate",
   "main": "index.js",
+  "homepage": "http://github.com/przbadu/webpack-config",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build:production":
+      "NODE_ENV=production webpack --config scripts/webpack.config.production.js",
+    "build:db":
+      "NODE_ENV=production webpack --config scripts/webpack.config.db.js",
+    "build": "npm run build:production && npm run build:db",
+    "watch:dev":
+      "webpack --colors --progress --config scripts/webpack.config.development.js --watch",
+    "build:dev":
+      "webpack --colors --progress --config scripts/webpack.config.development.js",
+    "watch:test":
+      "NODE_ENV=test webpack --colors --progress --config scripts/webpack.config.test.js --watch",
+    "build:test":
+      "NODE_ENV=test webpack --colors --progress --config scripts/webpack.config.test.js",
+    "watch":
+      "concurrently --kill-others \"npm run watch:dev\" \"npm run watch:test\"",
+    "server":
+      "BLUEBIRD_DEBUG=1 NODE_ENV=development forever --minUptime 1000 --spinSleepTime 1000 --workingDir $(pwd) --watch --watchDirectory build/src index.js",
+    "mocha":
+      "BLUEBIRD_DEBUG=1 NODE_ENV=test mocha --colors --recursive --reporter progress ./build/test",
+    "mocha:junit":
+      "BLUEBIRD_DEBUG=1 NODE_ENV=test mocha --colors --recursive --reporter mocha-junit-reporter ./build/test",
+    "dev": "concurrently --kill-others \"npm run watch\" \"npm run server\"",
+    "clean": "rm -rf build/*",
+    "lint": "eslint .",
+    "test": "npm run lint && npm run build:test && npm run coverage",
+    "test:junit":
+      "npm run lint && npm run build:test && npm run coverage:junit",
+    "start": "node index.js",
+    "coverage": "nyc npm run mocha",
+    "coverage:junit": "nyc npm run mocha:junit",
+    "coverage:report": "nyc report",
+    "migrate:make":
+      "ROOT_DIR=$(pwd) `npm bin`/babel-node `npm bin`/knex --knexfile src/db/knexfile.js migrate:make",
+    "migrate:latest":
+      "ROOT_DIR=$(pwd) `npm bin`/babel-node `npm bin`/knex --knexfile src/db/knexfile.js migrate:latest",
+    "migrate:rollback":
+      "ROOT_DIR=$(pwd) `npm bin`/babel-node `npm bin`/knex --knexfile src/db/knexfile.js migrate:rollback",
+    "seed:make":
+      "ROOT_DIR=$(pwd) `npm bin`/babel-node `npm bin`/knex --knexfile src/db/knexfile.js seed:make",
+    "seed:run":
+      "ROOT_DIR=$(pwd) `npm bin`/babel-node `npm bin`/knex --knexfile src/db/knexfile.js seed:run",
+    "migrate:latest:prebuilt":
+      "knex --knexfile lib/db/knexfile.js migrate:latest",
+    "migrate:rollback:prebuilt":
+      "knex --knexfile lib/db/knexfile.js migrate:rollback",
+    "eb:deploy:production": "npm run build && eb deploy",
+    "prepare": "npm run clean && mkdir -p build && npm run migrate:latest"
   },
   "author": "",
   "license": "ISC"
