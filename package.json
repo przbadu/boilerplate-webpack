@@ -54,5 +54,21 @@
     "prepare": "npm run clean && mkdir -p build && npm run migrate:latest"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.2.2",
+    "babel-loader": "^7.1.4",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-source-map-support-for-6": "^0.0.5",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "eslint": "^4.19.1",
+    "webpack": "^4.2.0",
+    "webpack-node-externals": "^1.6.0"
+  },
+  "dependencies": {
+    "bluebird": "^3.5.1"
+  }
 }
